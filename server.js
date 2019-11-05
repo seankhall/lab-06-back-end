@@ -1,18 +1,22 @@
 'use strict';
 
-// require('dotenv').config()
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors')
 
 const app = express();
-const PORT = process.env.PORT || 3020;
-
+const PORT = process.env.PORT || 3000;
 
 app.get('/location', (request, response) => {
   const geoData = require('./data/geo.json');
   const city = request.query.data;
-  const locationData = new Location(city,geoData);
-  response.send(locationData);
+  if (geoData.results[0].address_components[0].long_name === city){
+    const locationData = new Location(city,geoData);
+    response.send(locationData);
+  } else{
+    response.send('Josh is amazeballs. ERROR 500!!!!!!!')
+  }
+
 });
 
 app.get('/weather', (req,res) =>{
